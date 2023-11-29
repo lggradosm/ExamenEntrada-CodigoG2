@@ -1,5 +1,11 @@
 CREATE DATABASE almacen;
 
+-- drop table usuarios;
+-- drop table softwares;
+-- drop table hardwares;
+-- drop table prestamo_softwares;
+-- drop table prestamo_hardwares;
+
 
 
 CREATE TABLE IF NOT EXISTS usuarios (
@@ -9,36 +15,40 @@ CREATE TABLE IF NOT EXISTS usuarios (
 
 
 CREATE TABLE IF NOT EXISTS hardwares (
-                                            instrumento_id serial primary key ,
-                                            nombre_articulo varchar(50),
+                                         hardware_id serial primary key ,
+                                         nombre_articulo varchar(50),
     estado int,
     is_loaned bool,
-    desDuenio varchar(150)
+    marca varchar(50),
+    modelo varchar(50),
+    version int
     );
 
 CREATE TABLE IF NOT EXISTS softwares (
-                                          partitura_id serial primary key ,
-                                          nombre_articulo varchar(50),
+                                         software_id serial primary key ,
+                                         nombre_articulo varchar(50),
     estado int,
     is_loaned bool,
-    autor varchar(150),
-    duracion int
+    marca varchar(50),
+    modelo varchar(50),
+    version int,
+    tipo_licencia varchar(50)
     );
 
 
-CREATE TABLE IF NOT EXISTS  prestamo_instrumentos(
-                                                     prestamo_id SERIAL PRIMARY KEY,
-                                                     instrumento_id int,
-                                                     usuario_id int,
-                                                     FOREIGN KEY (instrumento_id) REFERENCES hardwares(instrumento_id),
+CREATE TABLE IF NOT EXISTS  prestamo_hardwares(
+                                                  prestamo_id SERIAL PRIMARY KEY,
+                                                  hardware_id int,
+                                                  usuario_id int,
+                                                  FOREIGN KEY (hardware_id) REFERENCES hardwares(hardware_id),
     FOREIGN KEY (usuario_id) REFERENCES  usuarios(usuario_id)
     );
 
-CREATE TABLE IF NOT EXISTS  prestamo_partituras(
-                                                   prestamo_id SERIAL PRIMARY KEY,
-                                                   partitura_id int,
-                                                   usuario_id int,
-                                                   FOREIGN KEY (partitura_id) REFERENCES softwares(partitura_id),
+CREATE TABLE IF NOT EXISTS  prestamo_softwares(
+                                                  prestamo_id SERIAL PRIMARY KEY,
+                                                  software_id int,
+                                                  usuario_id int,
+                                                  FOREIGN KEY (software_id) REFERENCES softwares(software_id),
     FOREIGN KEY (usuario_id) REFERENCES  usuarios(usuario_id)
     );
 
@@ -55,59 +65,59 @@ INSERT INTO usuarios (username) VALUES ('sandrus9');
 
 SELECT * FROM usuarios;
 
-INSERT INTO hardwares(nombre_articulo, estado, is_loaned,desDuenio) VALUES ('Guitarra',1,false,'Jorge');
-INSERT INTO hardwares(nombre_articulo, estado, is_loaned,desDuenio) VALUES ('Trompeta',1,false,'Ximena');
-INSERT INTO hardwares(nombre_articulo, estado, is_loaned,desDuenio) VALUES ('Violín',1,false,'Juan');
-INSERT INTO hardwares(nombre_articulo, estado, is_loaned,desDuenio) VALUES ('Cajón',1,false,'Estaban');
-INSERT INTO hardwares(nombre_articulo, estado, is_loaned,desDuenio) VALUES ('Guitarra Eléctrica',1,false,'Cesar');
-INSERT INTO hardwares(nombre_articulo, estado, is_loaned,desDuenio) VALUES ('Batería',1,false,'José');
-INSERT INTO hardwares(nombre_articulo, estado, is_loaned,desDuenio) VALUES ('Flauta Dulce',1,false,'Cesar A.');
-INSERT INTO hardwares(nombre_articulo, estado, is_loaned,desDuenio) VALUES ('Clarinete',1,false,'Alonso');
-INSERT INTO hardwares(nombre_articulo, estado, is_loaned,desDuenio) VALUES ('Tambor',1,false,'Lalo');
-INSERT INTO hardwares(nombre_articulo, estado, is_loaned,desDuenio) VALUES ('Trombón',1,false,'Felipe');
+INSERT INTO hardwares(nombre_articulo, estado, is_loaned,marca,modelo,version) VALUES ('Laptop',1,false,'Hp','1300',2022);
+INSERT INTO hardwares(nombre_articulo, estado, is_loaned,marca, modelo, version) VALUES ('Laptop',1,false,'Asus','Zaphyrus',2023);
+INSERT INTO hardwares(nombre_articulo, estado, is_loaned,marca, modelo, version) VALUES ('Laptop',1,false,'Asus','ROG',2020);
+INSERT INTO hardwares(nombre_articulo, estado, is_loaned,marca, modelo, version) VALUES ('Laptop',1,false,'Lenovo','Legion',2023);
+INSERT INTO hardwares(nombre_articulo, estado, is_loaned,marca, modelo, version) VALUES ('Laptop',1,false,'Lenovo','Thinkpad',2020);
+INSERT INTO hardwares(nombre_articulo, estado, is_loaned,marca, modelo, version) VALUES ('Laptop',1,false,'Acer','Nitro',2020);
+INSERT INTO hardwares(nombre_articulo, estado, is_loaned,marca, modelo, version) VALUES ('Laptop',1,false,'Hp','Omen',2023);
+INSERT INTO hardwares(nombre_articulo, estado, is_loaned,marca, modelo, version) VALUES ('Laptop',1,false,'Asus','Zenbook',2020);
+INSERT INTO hardwares(nombre_articulo, estado, is_loaned,marca, modelo, version) VALUES ('Laptop',1,false,'Asus','Vivobook',2021);
+INSERT INTO hardwares(nombre_articulo, estado, is_loaned,marca, modelo, version) VALUES ('Laptop',1,false,'Hp','compass',2015);
 SELECT * FROM hardwares;
 
 
-INSERT INTO softwares(nombre_articulo, estado, is_loaned,autor, duracion) VALUES ('Guitarra',1,false,'Gabriel',5);
-INSERT INTO softwares(nombre_articulo, estado, is_loaned,autor, duracion) VALUES ('Star Wars Flauta',1,false,'Gabriel',3);
-INSERT INTO softwares(nombre_articulo, estado, is_loaned,autor, duracion) VALUES ('Motor y motivo Trompeta',1,false,'Cesar',4);
-INSERT INTO softwares(nombre_articulo, estado, is_loaned,autor, duracion) VALUES ('Yo soy tu amigo fiel - Toy Story - Flauta',1,false,'Miguel',2);
-INSERT INTO softwares(nombre_articulo, estado, is_loaned,autor, duracion) VALUES ('Himno Nacional del Perú - Trompeta',1,false,'Pablo',3);
-INSERT INTO softwares(nombre_articulo, estado, is_loaned,autor, duracion) VALUES ('Himno Nacional de Argentina - Flauta',1,false,'Hector',2);
-INSERT INTO softwares(nombre_articulo, estado, is_loaned,autor, duracion) VALUES ('Himno Nacional de Chile - Tambor',1,false,'Brenda',3);
-INSERT INTO softwares(nombre_articulo, estado, is_loaned,autor, duracion) VALUES ('Himno Nacional de Colombia - Trombón',1,false,'Felipe',2);
-INSERT INTO softwares(nombre_articulo, estado, is_loaned,autor, duracion) VALUES ('Musica Ligera - Guitarra Electrica',1,false,'Gabriel',4);
-INSERT INTO softwares(nombre_articulo, estado, is_loaned,autor, duracion) VALUES ('Muralla Verde',1,false,'Carlos',3);
+INSERT INTO softwares(nombre_articulo, estado, is_loaned,marca, modelo, version, tipo_licencia) VALUES ('Word',1,false,'Microsoft', 'Office',365,'Digital');
+INSERT INTO softwares(nombre_articulo, estado, is_loaned,marca, modelo, version, tipo_licencia) VALUES ('Excel',1,false,'Microsoft','Office',365,'Digital');
+INSERT INTO softwares(nombre_articulo, estado, is_loaned,marca, modelo, version, tipo_licencia) VALUES ('Power Point',1,false,'Microsoft','Office',365,'Digital');
+INSERT INTO softwares(nombre_articulo, estado, is_loaned,marca, modelo, version, tipo_licencia) VALUES ('Autocad',1,false,'Autodesk','Windows',2023,'Fisica');
+INSERT INTO softwares(nombre_articulo, estado, is_loaned,marca, modelo, version, tipo_licencia) VALUES ('Photoshop',1,false,'Adobe','Cloud',2023,'Digital');
+INSERT INTO softwares(nombre_articulo, estado, is_loaned,marca, modelo, version, tipo_licencia) VALUES ('Illustrator',1,false,'Adobe','Cloud',2023,'Digital');
+INSERT INTO softwares(nombre_articulo, estado, is_loaned,marca, modelo, version, tipo_licencia) VALUES ('Antivirus',1,false,'Kaspesky','Cloud',2023,'Digital');
+INSERT INTO softwares(nombre_articulo, estado, is_loaned,marca, modelo, version, tipo_licencia) VALUES ('Google Chrome',1,false,'Google','Chrome',2023,'Digital');
+INSERT INTO softwares(nombre_articulo, estado, is_loaned,marca, modelo, version, tipo_licencia) VALUES ('Spotify',1,false,'Spotify','Spotify',2023,'Digital');
+INSERT INTO softwares(nombre_articulo, estado, is_loaned,marca, modelo, version, tipo_licencia) VALUES ('Postgresql',1,false,'Postgresql','Postgresql',1,'Digital');
 
 
 SELECT * from softwares;
 
-INSERT INTO prestamo_instrumentos(instrumento_id, usuario_id) VALUES (1,3);
-INSERT INTO prestamo_instrumentos(instrumento_id, usuario_id) VALUES (3,4);
-INSERT INTO prestamo_instrumentos(instrumento_id, usuario_id) VALUES (10,4);
-INSERT INTO prestamo_instrumentos(instrumento_id, usuario_id) VALUES (9,7);
-INSERT INTO prestamo_instrumentos(instrumento_id, usuario_id) VALUES (7,5);
-INSERT INTO prestamo_instrumentos(instrumento_id, usuario_id) VALUES (2,3);
-INSERT INTO prestamo_instrumentos(instrumento_id, usuario_id) VALUES (6,10);
-INSERT INTO prestamo_instrumentos(instrumento_id, usuario_id) VALUES (2,7);
-INSERT INTO prestamo_instrumentos(instrumento_id, usuario_id) VALUES (2,7);
-INSERT INTO prestamo_instrumentos(instrumento_id, usuario_id) VALUES (3,6);
+INSERT INTO prestamo_hardwares(hardware_id, usuario_id) VALUES (1,3);
+INSERT INTO prestamo_hardwares(hardware_id, usuario_id) VALUES (3,4);
+INSERT INTO prestamo_hardwares(hardware_id, usuario_id) VALUES (10,4);
+INSERT INTO prestamo_hardwares(hardware_id, usuario_id) VALUES (9,7);
+INSERT INTO prestamo_hardwares(hardware_id, usuario_id) VALUES (7,5);
+INSERT INTO prestamo_hardwares(hardware_id, usuario_id) VALUES (2,3);
+INSERT INTO prestamo_hardwares(hardware_id, usuario_id) VALUES (6,10);
+INSERT INTO prestamo_hardwares(hardware_id, usuario_id) VALUES (2,7);
+INSERT INTO prestamo_hardwares(hardware_id, usuario_id) VALUES (2,7);
+INSERT INTO prestamo_hardwares(hardware_id, usuario_id) VALUES (3,6);
 
-INSERT INTO prestamo_partituras(partitura_id, usuario_id) VALUES (1,3);
-INSERT INTO prestamo_partituras(partitura_id, usuario_id) VALUES (3,4);
-INSERT INTO prestamo_partituras(partitura_id, usuario_id) VALUES (10,4);
-INSERT INTO prestamo_partituras(partitura_id, usuario_id) VALUES (9,7);
-INSERT INTO prestamo_partituras(partitura_id, usuario_id) VALUES (7,5);
-INSERT INTO prestamo_partituras(partitura_id, usuario_id) VALUES (2,3);
-INSERT INTO prestamo_partituras(partitura_id, usuario_id) VALUES (6,10);
-INSERT INTO prestamo_partituras(partitura_id, usuario_id) VALUES (2,7);
-INSERT INTO prestamo_partituras(partitura_id, usuario_id) VALUES (2,7);
-INSERT INTO prestamo_partituras(partitura_id, usuario_id) VALUES (3,6);
+INSERT INTO prestamo_softwares(software_id, usuario_id) VALUES (1,3);
+INSERT INTO prestamo_softwares(software_id, usuario_id) VALUES (3,4);
+INSERT INTO prestamo_softwares(software_id, usuario_id) VALUES (10,4);
+INSERT INTO prestamo_softwares(software_id, usuario_id) VALUES (9,7);
+INSERT INTO prestamo_softwares(software_id, usuario_id) VALUES (7,5);
+INSERT INTO prestamo_softwares(software_id, usuario_id) VALUES (2,3);
+INSERT INTO prestamo_softwares(software_id, usuario_id) VALUES (6,10);
+INSERT INTO prestamo_softwares(software_id, usuario_id) VALUES (2,7);
+INSERT INTO prestamo_softwares(software_id, usuario_id) VALUES (2,7);
+INSERT INTO prestamo_softwares(software_id, usuario_id) VALUES (3,6);
 
 
 
-SELECT * FROM prestamo_instrumentos
-                  INNER JOIN usuarios u on prestamo_instrumentos.usuario_id = u.usuario_id;
+SELECT * FROM prestamo_hardwares
+                  INNER JOIN usuarios u on prestamo_hardwares.usuario_id = u.usuario_id;
 
-SELECT * FROM prestamo_partituras
-                  INNER JOIN usuarios u on prestamo_partituras.usuario_id = u.usuario_id;
+SELECT * FROM prestamo_softwares
+                  INNER JOIN usuarios u on prestamo_softwares.usuario_id = u.usuario_id;
